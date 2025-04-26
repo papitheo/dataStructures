@@ -3,6 +3,7 @@
 // defines size_t. GCC adds implcicitly in <iostream> but dont rely on 
 //implicit includes
 #include <cstddef>
+#include <stdexcept>
 
 
 
@@ -41,10 +42,13 @@ class myVector{
         // for modifying elements in the vector. vec2[5] = 6;
         ItemType& operator[](sizeType index);
         // only for reading elements in the vector. x = vec[2];
+        // One reason why we have the const version is because we want to 
+        // able to use it with a const object
         const ItemType& operator[](sizeType index) const;
         ItemType& at(sizeType index);
         const ItemType& at(sizeType index) const;
-        void resize(sizeType newSize);
+        void reSize(sizeType newSize);
+        void reSize(sizeType newSize, ItemType value);
         int size();
         int capacity();
         // Assigns new values to the vector, destroys old values. 
