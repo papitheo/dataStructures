@@ -49,8 +49,12 @@ class myVector{
         const ItemType& at(sizeType index) const;
         void reSize(sizeType newSize);
         void reSize(sizeType newSize, ItemType value);
-        int size();
-        int capacity();
+        // Best practice to make them const cus they dont modify the value
+        // also allows you to call them on the const instances of your fnx
+        // More importantly, making it const will make it possible to call
+        // it on 
+        int size() const;
+        int capacity() const;
         // Assigns new values to the vector, destroys old values. 
         // assign(5,10) means, fill 5 spaces with 10 
         void assign(sizeType count, const ItemType& newItem);
@@ -69,6 +73,7 @@ class myVector{
         void erase(int index);
         // The parameter doesn't have const because we will be modfying 
         // both of the vectors
+        // std Swap works by simply exchanging 
         void swap(myVector<ItemType>& otherVector);
 
 };

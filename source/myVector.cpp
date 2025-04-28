@@ -5,7 +5,7 @@
 // be the same
 template <typename ItemType>
 kofi::myVector<ItemType>::myVector():currentCapacity(INITIAL_CAPACITY), 
-    numberOfItems(0), items(new ItemType[INITIAL_CAPACITY]){}
+    numOfItems(0), items(new ItemType[INITIAL_CAPACITY]){}
 
 template <typename ItemType>
 kofi::myVector<ItemType>::myVector(const myVector& otherVector):
@@ -143,3 +143,139 @@ void kofi::myVector<ItemType>::reSize(sizeType newSize, ItemType value){
     }
    
 }
+
+template <typename ItemType>
+int kofi::myVector<ItemType>::size() const{
+    return numOfItems;
+}
+
+template <typename ItemType>
+int kofi::myVector<ItemType>::capacity() const{
+    return currentCapacity;
+}
+
+template <typename ItemType>
+void kofi::myVector<ItemType>::assign(sizeType count, const ItemType& item)
+{
+    if(count == 0){
+        delete[] items;
+        items = nullptr;
+        currentCapacity = 0;
+        numOfItems = 0;
+
+    }
+    else if(count > currentCapacity){
+        ItemType* newItems = new ItemType[count];
+        delete[] items;
+        items = newItems;
+        currentCapacity = count;
+        for(int i = 0; i<count; i++){
+            items[i] = item;
+        }
+        numOfItems = count;
+    }
+    else{
+        for(int i = 0; i<count; i++){
+            items[i] = item;
+        }
+        numOfItems = count;
+    }
+    
+}
+
+template <typename ItemType>
+void kofi::myVector<ItemType>::insert(int index, const ItemType& item){
+
+    if( index < 0 || index > numOfItems ){
+        throw std::out_of_range("The index is out or range");
+    }
+    else if(numOfItems == currentCapacity){
+        
+        sizeType newCapacity = (currentCapacity == 0) ? 1 : 
+        (currentCapacity * 2);
+
+        ItemType* vectorItems = new ItemType[newCapacity];
+
+        for(int i = 0; i<index; i++){
+            vectorItems[i] = items[i];
+        }
+
+        vectorItems[index] = item;
+
+        for(int i=index; i<numOfItems; i++){
+            vectorItems[i+1] = items[i];
+        }
+
+        delete[] items;
+        items = vectorItems;
+        currentCapacity = newCapacity;
+    }
+    else{
+
+        for(int i = numOfItems; i>index; i--){
+            items[i] = items[i-1];
+        }
+        items[index] = item;
+
+}
+}
+
+template <typename ItemType>
+void kofi::myVector<ItemType>::pushBack(const ItemType& item){
+    if(numOfItems == currentCapacity){
+        sizeType newCapacity = (currentCapacity == 0) ? 1 : 
+        (currentCapacity*2);
+        ItemType* newItems = new ItemType[newCapacity];
+        for(int i=0; i<numOfItems; i++){
+            newItems[i] = items[i];
+        }
+        newItems[numOfItems] = item;
+        delete[] items;
+        items = newItems;
+        currentCapacity = newCapacity;
+        numOfItems+=1;
+    }
+    else{
+        items[numOfItems] = item;
+        numOfItems+=1;
+    }
+}
+template <typename ItemType>
+void kofi::myVector<ItemType>::popBack(){
+    if(numOfItems == 0 ){
+        throw std::out_of_range("Container is empty");
+    }
+    else{
+         numOfItems-=1;
+    }
+}
+
+template <typename ItemType>
+void kofi::myVector<ItemType>::erase(int index){
+    if(index >= numOfItems || index < 0){
+        throw std::out_of_range("Index is out of scope");
+    }
+    for(int i =index; i<numOfItems-1;i++){
+        items[i] = items[i+1];
+    }
+    numOfItems-=1;
+}
+
+template <typename ItemType>
+void kofi::myVector<ItemType>::swap(myVector<ItemType>& otherVector){
+    ItemType* tempItems = items;
+    items = otherVector.items;
+    otherVector.items = tempItems;
+    
+    sizeType tempCapacity = currentCapacity;
+    currentCapacity = otherVector.currentCapacity;
+    otherVector.currentCapacity = tempCapacity;
+
+    sizeType tempSize = numOfItems;
+    numOfItems = otherVector.numOfItems;
+    otherVector.numOfItems = tempSize;
+    
+
+}
+
+
